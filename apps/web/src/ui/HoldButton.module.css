@@ -1,0 +1,43 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+  padding: 0 var(--space-4) 0 var(--space-2);
+  border: 2px solid currentColor;
+  border-radius: var(--radius);
+  background: transparent;
+  color: inherit;
+  font-size: var(--fs);
+  font-weight: var(--fw-bold);
+  touch-action: none;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.button[data-holding='true'] {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.dial {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.dial > svg:first-child {
+  position: absolute;
+  inset: 0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.6;
+}
+
+.label {
+  white-space: nowrap;
+}

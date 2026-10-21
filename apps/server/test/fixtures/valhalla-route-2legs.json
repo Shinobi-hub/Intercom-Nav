@@ -1,0 +1,77 @@
+{
+  "trip": {
+    "locations": [
+      {
+        "type": "break",
+        "lat": 18.5204,
+        "lon": 73.8567,
+        "side_of_street": "left",
+        "original_index": 0
+      },
+      {
+        "type": "break",
+        "lat": 18.525,
+        "lon": 73.86,
+        "original_index": 1
+      },
+      {
+        "type": "break",
+        "lat": 18.5304,
+        "lon": 73.8667,
+        "side_of_street": "right",
+        "original_index": 2
+      }
+    ],
+    "legs": [
+      {
+        "summary": {
+          "has_time_restrictions": false,
+          "has_toll": false,
+          "has_highway": false,
+          "has_ferry": false,
+          "min_lat": 18.520403,
+          "min_lon": 73.856825,
+          "max_lat": 18.525,
+          "max_lon": 73.860339,
+          "time": 349.129,
+          "length": 0.867,
+          "cost": 1053.504
+        },
+        "shape": "etkib@sszzkCoA@kENgCJq@BIwHGyTgAq\\aHoCmCsA_CoBu@aAUcAYuC_Mm@sEqAwC_B}AsCgAkCaY`DaAuKsA_\\AwAO_k@}FEoIS_FMeRqAuOmAjAwXwFdDeCpA{KfGyHfBqRReCUmCoAsE{LsCcHyAg@eBA}Dz@{OvE{R`IqDlA"
+      },
+      {
+        "summary": {
+          "has_time_restrictions": false,
+          "has_toll": false,
+          "has_highway": false,
+          "has_ferry": false,
+          "min_lat": 18.52386,
+          "min_lon": 73.85784,
+          "max_lat": 18.53061,
+          "max_lon": 73.866689,
+          "time": 441.685,
+          "length": 1.936,
+          "cost": 791.674
+        },
+        "shape": "ostib@ay`{kCaO|EpAbDbJxRfHvMfPbVnKtNdFbGX\\VZ~NdSJN~@pA\\p@nDpF`@j@_D|DaAeBwCkFgB{CsA_CqKeOyG{HsK{NmPkVoHcNeJ}RqEsJwBuEqSa`@yBqDgF}GiGeHeIeJeIoGoLwJwHeH}FkHyH_Ks@_AcDkFySs`@aFyJ{C_H{AgDcCuGgByEk@oC{APcD@m@Bo]hAiNj@ak@lCqCdDkBrCmB`F@v@FzLBxE@bO?bHf@~PwDCqAm[AqMA{BMsYOaBQuAMm@gAuEw@{CaByH{AcHmAgLSoEa@wJaAaa@w@kh@q[v@M_Iw@qf@_@}UMsH"
+      }
+    ],
+    "summary": {
+      "has_time_restrictions": false,
+      "has_toll": false,
+      "has_highway": false,
+      "has_ferry": false,
+      "min_lat": 18.520403,
+      "min_lon": 73.856825,
+      "max_lat": 18.53061,
+      "max_lon": 73.866689,
+      "time": 790.814,
+      "length": 2.803,
+      "cost": 1845.179
+    },
+    "status_message": "Found route between points",
+    "status": 0,
+    "units": "kilometers",
+    "language": "en-US"
+  }
+}

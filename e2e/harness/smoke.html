@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Intercom E2E harness</title>
+    <!--
+      Static page for harness.smoke.spec.ts. No app code: it proves the rig itself works.
+      - meters getUserMedia (raw and with the app's processing constraints) with an AnalyserNode
+      - publishes/subscribes mic audio through LiveKit (livekit-client UMD, served by the spec)
+      - connects two rider browsers with a plain RTCPeerConnection (signaling relayed by the spec)
+      Everything is exposed on window.smoke; levels are recorded as { t: Date.now(), db } frames.
+    -->
+  </head>
+  <body>
+    <p id="status">harness page</p>
+    <script>
+      'use strict';
+      const FRAME_MS = 50;
+      const meters = {};
+      let ctx = null;
+
+      function audioContext() {
+        ctx ??= new AudioContext({ sampleRate: 48000 });
+        return ctx;
+      }
+
+      /** RMS (dBFS) of `stream` every FRAME_MS into meters[name].frames. */
+      function meter(name, stream) {
+        const ac = audioContext();
+        const source = ac.createMediaStreamSource(stream);
+        const analyser = ac.createAnalyser();
+        analyser.fftSize = 2048;
+        source.connect(analyser);
+        // Keep the node pulled by the graph without making a sound.
+        const sink = ac.createGain();
+        sink.gain.value = 0;
+        analyser.connect(sink).connect(ac.destination);
+        const buf = new Float32Array(analyser.fftSize);
+        const frames = [];
+        const timer = setInterval(() => {
+          analyser.getFloatTimeDomainData(buf);
+          let sum = 0;
+          for (const v of buf) sum += v * v;
+          const rms = Math.sqrt(sum / buf.length);
+          frames.push({ t: Date.now(), db: rms > 0 ? 20 * Math.log10(rms) : -200 });
+        }, FRAME_MS);
+        meters[name] = { frames, timer, keep: [source, analyser, sink] };
+      }
+
+      const PROCESSING = {
+        raw: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+        // What the app asks for (docs/ARCHITECTURE.md, Audio engine).
+        processed: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+      };
+
+      async function startMic(kind) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: { ...PROCESSING[kind], channelCount: 1 } });
+        await audioContext().resume();
+        meter(`mic-${kind}`, stream);
+        return stream.getAudioTracks()[0].getSettings();
+      }
+
+      /** Plays a remote WebRTC track into the meter (Chrome needs it attached to a media element). */
+      function meterRemote(name, track) {
+        const stream = new MediaStream([track]);
+        const el = new Audio();
+        el.muted = true;
+        el.srcObject = stream;
+        el.play().catch(() => {});
+        meter(name, stream);
+      }
+
+      async function hostCandidates() {
+        const pc = new RTCPeerConnection();
+        pc.createDataChannel('probe');
+        const candidates = [];
+        pc.onicecandidate = (e) => e.candidate && candidates.push(e.candidate.candidate);
+        await pc.setLocalDescription(await pc.createOffer());
+        await waitIceComplete(pc);
+        pc.close();
+        return candidates.filter((c) => / typ host/.test(c)).map((c) => c.split(' ')[4]);
+      }
+
+      function waitIceComplete(pc) {
+        if (pc.iceGatheringState === 'complete') return Promise.resolve();
+        return new Promise((resolve) => {
+          const done = () => pc.iceGatheringState === 'complete' && resolve();
+          pc.addEventListener('icegatheringstatechange', done);
+          setTimeout(resolve, 5000);
+        });
+      }
+
+      // ---- direct peer connection (mesh-style), non-trickle: full SDP after gathering ----------------
+      let pc = null;
+      async function meshOffer() {
+        pc = new RTCPeerConnection();
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: PROCESSING.raw });
+        for (const t of stream.getAudioTracks()) pc.addTrack(t, stream);
+        await pc.setLocalDescription(await pc.createOffer());
+        await waitIceComplete(pc);
+        return pc.localDescription.toJSON();
+      }
+      async function meshAnswer(offer) {
+        pc = new RTCPeerConnection();
+        pc.ontrack = (e) => meterRemote('mesh-remote', e.track);
+        await pc.setRemoteDescription(offer);
+        await pc.setLocalDescription(await pc.createAnswer());
+        await waitIceComplete(pc);
+        return pc.localDescription.toJSON();
+      }
+      async function meshAccept(answer) {
+        await pc.setRemoteDescription(answer);
+      }
+      async function meshPair() {
+        const stats = await pc.getStats();
+        for (const s of stats.values()) {
+          if (s.type === 'candidate-pair' && s.state === 'succeeded' && s.nominated) {
+            const local = stats.get(s.localCandidateId);
+            const remote = stats.get(s.remoteCandidateId);
+            return { local: local?.candidateType, remote: remote?.candidateType, bytesReceived: s.bytesReceived, bytesSent: s.bytesSent };
+          }
+        }
+        return { state: pc.connectionState };
+      }
+
+      // ---- LiveKit -----------------------------------------------------------------------------------
+      let room = null;
+      async function livekitJoin(url, token, publish) {
+        const LK = window.LivekitClient;
+        if (!LK) throw new Error('livekit-client UMD did not load');
+        room = new LK.Room();
+        room.on(LK.RoomEvent.TrackSubscribed, (track, _pub, participant) => {
+          if (track.kind === 'audio') meterRemote(`lk-${participant.identity}`, track.mediaStreamTrack);
+        });
+        await room.connect(url, token);
+        if (publish) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: PROCESSING.raw });
+          await room.localParticipant.publishTrack(stream.getAudioTracks()[0], { source: LK.Track.Source.Microphone, dtx: false });
+        }
+        return room.localParticipant.identity;
+      }
+
+      async function geolocation() {
+        return new Promise((resolve) =>
+          navigator.geolocation.getCurrentPosition(
+            (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy }),
+            (e) => resolve({ error: e.code }),
+            { timeout: 5000 },
+          ),
+        );
+      }
+
+      async function permissions() {
+        const out = {};
+        for (const name of ['microphone', 'geolocation']) out[name] = (await navigator.permissions.query({ name })).state;
+        return out;
+      }
+
+      function frames(name, from = 0) {
+        return meters[name] ? meters[name].frames.slice(from) : [];
+      }
+
+      window.smoke = {
+        startMic,
+        hostCandidates,
+        meshOffer,
+        meshAnswer,
+        meshAccept,
+        meshPair,
+        livekitJoin,
+        geolocation,
+        permissions,
+        frames,
+        meters: () => Object.keys(meters),
+        viewport: () => ({ width: innerWidth, height: innerHeight, dpr: devicePixelRatio, touch: navigator.maxTouchPoints }),
+      };
+    </script>
+    <script src="/vendor/livekit-client.umd.js" async></script>
+  </body>
+</html>

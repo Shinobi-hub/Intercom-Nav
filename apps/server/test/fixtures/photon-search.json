@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 1145089204,
+        "osm_key": "historic",
+        "osm_value": "fort",
+        "type": "house",
+        "name": "Shaniwar Wada",
+        "street": "Shivaji Road",
+        "district": "Kasba Peth",
+        "city": "Pune",
+        "county": "Pune City Subdistrict",
+        "state": "Maharashtra",
+        "country": "India",
+        "postcode": "411001",
+        "countrycode": "IN",
+        "extent": [
+          73.8545823,
+          18.5201858,
+          73.8561121,
+          18.5185869
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.8553566,
+          18.5193826
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "R",
+        "osm_id": 2861672,
+        "osm_key": "building",
+        "osm_value": "yes",
+        "type": "house",
+        "name": "Shaniwar Wada",
+        "street": "Shivaji Road",
+        "district": "Kasba Peth",
+        "city": "Pune",
+        "county": "Pune City Subdistrict",
+        "state": "Maharashtra",
+        "country": "India",
+        "postcode": "411001",
+        "countrycode": "IN",
+        "extent": [
+          73.8545823,
+          18.5201858,
+          73.8561121,
+          18.5185869
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.8546467,
+          18.5193826
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "N",
+        "osm_id": 2870389546,
+        "osm_key": "highway",
+        "osm_value": "bus_stop",
+        "type": "house",
+        "name": "Nana Wada",
+        "street": "Shivaji Road",
+        "district": "Shaniwar Peth",
+        "city": "Pune",
+        "county": "Pune City Subdistrict",
+        "state": "Maharashtra",
+        "country": "India",
+        "postcode": "411001",
+        "countrycode": "IN"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.8562164,
+          18.5183421
+        ]
+      }
+    }
+  ]
+}

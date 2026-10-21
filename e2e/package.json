@@ -1,0 +1,16 @@
+{
+  "name": "@intercom/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "fixtures": "node fixtures/generate.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test:harness": "E2E_SERVERS=0 playwright test --project=harness"
+  },
+  "devDependencies": {
+    "@intercom/shared": "*",
+    "@playwright/test": "^1.64.1"
+  }
+}

@@ -1,0 +1,281 @@
+/*
+ * Ride screen: the map runs edge to edge between a status slab across the top and the dock along
+ * the bottom (right edge in landscape), framed like an instrument cluster. The map stops at the
+ * chrome rather than running under it, so its attribution stays visible and "follow me" centers
+ * in the part of the map you can actually see.
+ */
+.screen {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.screen .map {
+  position: absolute;
+  top: calc(var(--safe-top) + var(--topbar-h));
+  right: 0;
+  bottom: calc(var(--dock-h) + var(--safe-bottom));
+  left: 0;
+}
+
+/* ---- top bar ---- */
+.topbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: var(--z-map-ui);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: calc(var(--topbar-h) + var(--safe-top));
+  padding: var(--safe-top) calc(var(--safe-right) + var(--space-2)) 0 calc(var(--safe-left) + var(--space-2));
+  border-bottom: 1px solid var(--slab-edge);
+  background: var(--slab);
+}
+
+.code {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  height: var(--touch-min);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.code:active {
+  background: var(--surface-2);
+}
+
+.codeText {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.codeIcon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--text-dim);
+}
+
+.telltales {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.telltale {
+  --tone: var(--text-faint);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 46px;
+  padding: 0 2px;
+  color: var(--tone);
+}
+
+.telltale[data-tone='ok'] {
+  --tone: var(--ok);
+}
+
+.telltale[data-tone='warn'] {
+  --tone: var(--warn);
+}
+
+.telltale[data-tone='bad'] {
+  --tone: var(--danger);
+}
+
+.telltaleIcon {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.4;
+}
+
+.telltale[data-tone='warn'] .telltaleIcon {
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+.telltaleCaption {
+  font-size: 11px;
+  font-weight: var(--fw-heavy);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 64px;
+  height: var(--touch-min);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.count:active {
+  background: var(--surface-2);
+}
+
+.countIcon {
+  width: 22px;
+  height: 22px;
+  color: var(--text-dim);
+}
+
+.countValue {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-heavy);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- floating layers over the map ---- */
+.stack {
+  position: absolute;
+  top: calc(var(--safe-top) + var(--topbar-h) + var(--space-2));
+  right: calc(var(--safe-right) + var(--space-2));
+  left: calc(var(--safe-left) + var(--space-2));
+  z-index: var(--z-banner);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  pointer-events: none;
+}
+
+.stack > * {
+  pointer-events: auto;
+}
+
+.route {
+  display: flex;
+  justify-content: center;
+}
+
+.route:empty {
+  display: none;
+}
+
+.bottomLeft {
+  position: absolute;
+  right: calc(var(--safe-right) + 84px);
+  bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--space-2));
+  left: calc(var(--safe-left) + var(--space-2));
+  z-index: var(--z-map-ui);
+  display: flex;
+  pointer-events: none;
+}
+
+.mapControls {
+  position: absolute;
+  right: calc(var(--safe-right) + var(--space-2));
+  /* Clear of MapLibre's compact attribution button in the map's bottom-right corner. */
+  bottom: calc(var(--dock-h) + var(--safe-bottom) + 40px);
+  z-index: var(--z-map-ui);
+}
+
+/* ---- talking now ---- */
+.talking {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  min-height: 48px;
+  padding: 6px var(--space-3) 6px var(--space-3);
+  border: 2px solid var(--speaking);
+  border-radius: var(--radius-pill);
+  background: var(--slab);
+  box-shadow: var(--shadow-1);
+  animation: rise var(--dur) var(--ease);
+}
+
+.talkingIcon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  color: var(--speaking);
+  stroke-width: 2.6;
+  animation: blink 0.9s ease-in-out infinite;
+}
+
+.talker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.talkerName {
+  overflow: hidden;
+  font-size: var(--fs);
+  font-weight: var(--fw-heavy);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.talkerMore {
+  font-size: var(--fs);
+  font-weight: var(--fw-heavy);
+  color: var(--text-dim);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* ---- landscape: dock on the right edge ---- */
+@media (orientation: landscape) {
+  .screen .map {
+    right: calc(var(--dock-w) + var(--safe-right));
+    bottom: 0;
+  }
+
+  .topbar {
+    right: calc(var(--dock-w) + var(--safe-right));
+    padding-right: var(--space-2);
+  }
+
+  .stack {
+    right: calc(var(--dock-w) + var(--safe-right) + var(--space-2));
+    width: min(480px, 100% - var(--dock-w) - var(--safe-right) - var(--safe-left) - var(--space-4));
+  }
+
+  .route {
+    justify-content: flex-start;
+  }
+
+  .bottomLeft {
+    right: calc(var(--dock-w) + var(--safe-right) + 84px);
+    bottom: calc(var(--safe-bottom) + var(--space-2));
+  }
+
+  .mapControls {
+    right: calc(var(--dock-w) + var(--safe-right) + var(--space-2));
+    bottom: calc(var(--safe-bottom) + 40px);
+  }
+}

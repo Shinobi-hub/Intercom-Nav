@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Overrides Capacitor's layout of the same name (app resources win over library resources) to swap
+  in RideWebView, which keeps the page running with the screen off during a ride. Keep the id: the
+  Bridge finds the WebView by R.id.webview and requires a CapacitorWebView.
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.intercomnav.MainActivity">
+
+    <app.intercomnav.web.RideWebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,314 @@
+/* Home, join and session screens: one scrolling column on phones, two columns on wide or landscape. */
+.screen {
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+}
+
+.layout {
+  display: grid;
+  /* An explicit track: an implicit one would grow to the inputs' intrinsic widths and overflow. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: calc(var(--safe-top) + var(--space-5)) calc(var(--safe-right) + 20px)
+    calc(var(--safe-bottom) + var(--space-6)) calc(var(--safe-left) + 20px);
+}
+
+@media (orientation: landscape) and (min-width: 640px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'intro panel'
+      'resume panel'
+      'actions panel';
+    grid-template-rows: auto auto 1fr;
+    column-gap: var(--space-6);
+    align-items: start;
+    width: min(100%, 980px);
+  }
+
+  .intro {
+    grid-area: intro;
+  }
+
+  .resume {
+    grid-area: resume;
+  }
+
+  .panel {
+    grid-area: panel;
+  }
+
+  .actions {
+    grid-area: actions;
+  }
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.brand img {
+  border-radius: 9px;
+}
+
+.h1 {
+  margin: 0;
+  font-size: var(--fs-xxl);
+  font-weight: var(--fw-heavy);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.h2 {
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-heavy);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.lede {
+  max-width: 36ch;
+  margin: 0;
+  color: var(--text-dim);
+  font-size: var(--fs);
+}
+
+/* The code as a readout plate: the one thing riders read aloud to each other. */
+.plate {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+}
+
+.resume,
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.panel {
+  padding: var(--space-4);
+  border: 1px solid var(--slab-edge);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.nameBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--touch-primary);
+  padding: 0 var(--space-4);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.nameBox:focus-within {
+  border-color: var(--accent);
+}
+
+.nameBox.invalid {
+  border-color: var(--danger);
+}
+
+.nameInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  outline: none;
+}
+
+.fieldError {
+  margin: 0;
+  color: #ff8a80;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.joinRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+}
+
+.joinButton {
+  padding-inline: var(--space-5);
+}
+
+.hint {
+  margin: 0;
+  color: var(--warn);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--danger-tint);
+  color: #ffd9d6;
+  font-size: var(--fs);
+  font-weight: var(--fw-bold);
+  line-height: 1.3;
+}
+
+.errorIcon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  color: var(--danger);
+  stroke-width: 2.6;
+}
+
+/* Session replaced: covers everything, including a running ride screen. */
+.blocker {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-blocker);
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: calc(var(--safe-top) + var(--space-5)) calc(var(--safe-right) + 20px)
+    calc(var(--safe-bottom) + var(--space-5)) calc(var(--safe-left) + 20px);
+  background: var(--bg);
+}
+
+.blockerCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: min(100%, 440px);
+  text-align: center;
+}
+
+.blockerIcon {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--warn);
+}
+
+.blockerIcon svg {
+  width: 48px;
+  height: 48px;
+  stroke-width: 2;
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .blockerCard {
+    gap: var(--space-3);
+  }
+
+  .blockerIcon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .blockerIcon svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Phones on their side: drop the lede so the join row stays on screen. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .layout {
+    gap: var(--space-4);
+  }
+
+  .intro .lede {
+    display: none;
+  }
+
+  .brand {
+    margin-bottom: 0;
+  }
+
+  .h1 {
+    font-size: var(--fs-xl);
+  }
+
+  .plate {
+    font-size: 32px;
+  }
+}

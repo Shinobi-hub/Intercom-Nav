@@ -1,0 +1,110 @@
+{
+  "sampleRate": 16000,
+  "fixtures": {
+    "speech-samantha.wav": {
+      "seconds": 4.014,
+      "kind": "speech",
+      "voice": "Samantha",
+      "text": "Heads up, gravel on the road ahead.",
+      "segments": [
+        [
+          0.8,
+          2.81
+        ]
+      ]
+    },
+    "speech-daniel.wav": {
+      "seconds": 4.283,
+      "kind": "speech",
+      "voice": "Daniel",
+      "text": "Pulling over for fuel at the next exit.",
+      "segments": [
+        [
+          0.8,
+          3.08
+        ]
+      ]
+    },
+    "speech-rishi.wav": {
+      "seconds": 5.65,
+      "kind": "speech",
+      "voice": "Rishi",
+      "text": "Can everyone hear me? Testing, one, two, three.",
+      "segments": [
+        [
+          0.8,
+          4.44
+        ]
+      ]
+    },
+    "speech-karen.wav": {
+      "seconds": 3.998,
+      "kind": "speech",
+      "voice": "Karen",
+      "text": "Stopping for coffee in ten minutes.",
+      "segments": [
+        [
+          0.8,
+          2.79
+        ]
+      ]
+    },
+    "speech-wind.wav": {
+      "seconds": 6.205,
+      "kind": "speech",
+      "voice": "Daniel",
+      "text": "Slow down, there is a speed camera after the bridge.",
+      "noise": "wind -30 dBFS",
+      "segments": [
+        [
+          1.52,
+          4.67
+        ]
+      ]
+    },
+    "wind.wav": {
+      "seconds": 8,
+      "kind": "noise",
+      "noise": "wind -26 dBFS, gusting",
+      "segments": []
+    },
+    "hum.wav": {
+      "seconds": 6,
+      "kind": "noise",
+      "noise": "engine -26 dBFS, revving 35-75 Hz firing rate",
+      "segments": []
+    },
+    "silence.wav": {
+      "seconds": 1.5,
+      "kind": "noise",
+      "noise": "digital silence then -72 dBFS room tone",
+      "segments": []
+    },
+    "mic-loop.wav": {
+      "seconds": 7.514,
+      "kind": "speech",
+      "voice": "Samantha",
+      "text": "Heads up, gravel on the road ahead.",
+      "segments": [
+        [
+          2,
+          4.01
+        ]
+      ]
+    },
+    "wind-captured.wav": {
+      "seconds": 8.0,
+      "kind": "noise",
+      "captured": true,
+      "noise": "Captured, not synthesized: the e2e wind.wav fake mic after Chrome's capture processing (noise suppression + AGC), as the sender's own VAD sees it. Gusts come out 20-30 dB above the suppressed bed.",
+      "segments": []
+    },
+    "wind-received.wav": {
+      "seconds": 8.0,
+      "kind": "noise",
+      "captured": true,
+      "noise": "Captured, not synthesized: the same 8 s of wind after Opus (DTX on) over LiveKit, decoded by the receiving rider. DTX adds comfort-noise gaps between gusts.",
+      "segments": []
+    }
+  }
+}

@@ -1,0 +1,97 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: min(560px, 100%);
+  min-height: var(--touch-min);
+  padding: 6px 20px 6px 6px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.pill:active {
+  transform: scale(0.97);
+}
+
+.offRoute {
+  border-color: var(--warn);
+}
+
+.icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--route);
+  color: var(--text-on-color);
+}
+
+.offRoute .icon {
+  background: var(--warn);
+  color: var(--text-on-warn);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.offRoute .title {
+  color: var(--warn);
+}
+
+/* Read by tests and screen readers as one "A · B · C" line; only shown when it's one line. */
+.sep {
+  display: none;
+  white-space: pre;
+}
+
+.stats {
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.dot {
+  color: var(--text-faint);
+  white-space: pre;
+}
+
+/* Wide screens (landscape, tablets): one line, everything the same size. */
+@media (min-width: 600px) {
+  .text {
+    flex-direction: row;
+    align-items: baseline;
+  }
+
+  .title {
+    color: var(--text);
+    font-size: var(--fs-lg);
+  }
+
+  .sep {
+    display: inline;
+    color: var(--text-faint);
+    font-size: var(--fs-lg);
+  }
+}

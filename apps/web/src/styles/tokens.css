@@ -1,0 +1,116 @@
+/*
+ * Design tokens shared by every feature. Use var(--token) instead of raw values.
+ * Add tokens freely; don't rename or repurpose existing ones (other features depend on them).
+ * The UI is dark and high-contrast on purpose: riders glance at it in sun, rain and at night,
+ * often through a visor, with gloves on.
+ */
+:root {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg: #0b0d10;
+  --surface: #15181d;
+  --surface-2: #1e232a;
+  --surface-3: #283039;
+  --scrim: rgba(5, 7, 10, 0.72);
+  --border: #2f3640;
+
+  /* text */
+  --text: #f5f7fa;
+  --text-dim: #aab3be;
+  --text-faint: #75808c;
+  --text-on-color: #ffffff;
+  --text-on-warn: #1a1200;
+
+  /* roles */
+  --accent: #3d9bff;
+  --ok: #30d158;
+  --warn: #ffb020;
+  --danger: #ff3b30;
+  --sos: #ff2d2d;
+  --sos-deep: #7a0000;
+  --break: #ffb020;
+  --mic-live: #30d158;
+  --mic-vox: #3d9bff;
+  --mic-off: #6b7480;
+  --music: #8e7cff;
+  --speaking: #30d158;
+  --route: #3d9bff;
+
+  /* type */
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --fs-xs: 13px;
+  --fs-sm: 15px;
+  --fs: 18px;
+  --fs-lg: 22px;
+  --fs-xl: 28px;
+  --fs-xxl: 40px;
+  --fw-regular: 500;
+  --fw-bold: 750;
+
+  /* spacing + shape */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* touch targets: gloved fingers */
+  --touch-min: 56px;
+  --touch-primary: 76px;
+
+  /* layers */
+  --z-map: 0;
+  --z-map-ui: 10;
+  --z-dock: 20;
+  --z-banner: 30;
+  --z-toast: 40;
+  --z-sheet: 50;
+  --z-alert: 90;
+  --z-blocker: 100;
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur: 220ms;
+
+  /* safe areas (notches, home indicator) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* ---- app shell (UI agent) ---- */
+  /* Fills that carry white text. --accent and --danger are too light for 4.5:1 under white. */
+  --accent-strong: #1769e0;
+  --danger-strong: #d70015;
+  --ink: #0b0d10;
+  /* Status tints for backgrounds behind colored icons and text. */
+  --accent-tint: rgba(61, 155, 255, 0.16);
+  --ok-tint: rgba(48, 209, 88, 0.16);
+  --warn-tint: rgba(255, 176, 32, 0.16);
+  --danger-tint: rgba(255, 59, 48, 0.18);
+  --music-tint: rgba(142, 124, 255, 0.18);
+  /* Instrument slabs laid over the map (top bar, dock, pills). Opaque enough to read in sun. */
+  --slab: rgba(11, 13, 16, 0.94);
+  --slab-edge: #262c34;
+  --hairline: rgba(255, 255, 255, 0.07);
+  --shadow-1: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-2: 0 16px 40px rgba(0, 0, 0, 0.55);
+  /* Display sizes for the code, the SOS overlay and big readouts. */
+  --fs-display: 56px;
+  --fs-hero: 104px;
+  --fw-heavy: 850;
+  --tracking-label: 0.06em;
+  /* Ride screen geometry. */
+  --topbar-h: 64px;
+  --dock-h: 88px;
+  --dock-w: 100px;
+  --z-resume: 80;
+}

@@ -1,0 +1,403 @@
+/*
+ * The dock reads like a row of hardware keys: one slab, hairline separators, a lamp per key that
+ * lights in the function's color (blue VOX, green OPEN/talking, violet music, amber break, red SOS).
+ */
+.dock {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-dock);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(var(--touch-primary), 1fr)) minmax(var(--touch-min), 0.72fr);
+  padding: 0 var(--safe-right) var(--safe-bottom) var(--safe-left);
+  border-top: 1px solid var(--slab-edge);
+  background: var(--slab);
+}
+
+/* Tablets in portrait: keep the keys together instead of stretching them across. */
+@media (orientation: portrait) and (min-width: 640px) {
+  .dock {
+    padding-inline: max(var(--safe-left), calc((100% - 600px) / 2));
+  }
+}
+
+/* Narrower than any phone we target: let the keys shrink rather than overflow. */
+@media (orientation: portrait) and (max-width: 359px) {
+  .dock {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 0.72fr);
+  }
+}
+
+.key {
+  --tone: var(--text-dim);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: var(--dock-h);
+  padding: 14px 4px 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-dim);
+  touch-action: none;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.key + .key::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 0;
+  width: 1px;
+  background: var(--hairline);
+}
+
+.key:active,
+.key[data-pressing='true'] {
+  background: var(--surface-2);
+}
+
+.key[data-tone='mic-vox'] {
+  --tone: var(--mic-vox);
+}
+
+.key[data-tone='mic-open'] {
+  --tone: var(--mic-live);
+}
+
+.key[data-tone='mic-off'] {
+  --tone: var(--mic-off);
+}
+
+.key[data-tone='music'] {
+  --tone: var(--music);
+}
+
+.key[data-tone='break'] {
+  --tone: var(--break);
+}
+
+.key[data-tone='sos'] {
+  --tone: var(--sos);
+}
+
+.key[data-tone='neutral'] {
+  --tone: var(--text);
+}
+
+.lamp {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 30px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-3);
+  transform: translateX(-50%);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.key[data-lit='true'] {
+  color: var(--text);
+}
+
+.key[data-lit='true'] .lamp {
+  background: var(--tone);
+}
+
+.key[data-lit='true'] .glyph {
+  color: var(--tone);
+}
+
+.glyph {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+}
+
+.glyph > svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 2.2;
+}
+
+.caption {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Track titles stay in their own case: easier to recognise than shouted. */
+.title {
+  font-size: 13px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Mic: the live ring while you are talking. */
+.key[data-speaking='true'] .glyph {
+  box-shadow: 0 0 0 3px var(--speaking);
+  animation: talking 0.9s ease-in-out infinite;
+}
+
+@keyframes talking {
+  50% {
+    box-shadow: 0 0 0 6px rgba(48, 209, 88, 0.45);
+  }
+}
+
+/* Break: depleting cooldown meter along the bottom of the key. */
+.meter {
+  position: absolute;
+  right: 14px;
+  bottom: 6px;
+  left: 14px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--surface-3);
+}
+
+.meter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--break);
+  transform: scaleX(var(--left, 0));
+  transform-origin: left center;
+  transition: transform 250ms linear;
+}
+
+/* SOS: a red key at rest, brighter while held, solid red while your SOS is active. */
+.sos {
+  background: #240a0d;
+  color: #ff6b63;
+}
+
+.sos .lamp {
+  background: #5a1418;
+}
+
+.sos[data-holding='true'] {
+  background: #4a0d12;
+}
+
+.sos[data-active='true'] {
+  background: var(--danger-strong);
+  color: #ffffff;
+}
+
+.sos[data-active='true'] .glyph,
+.sos[data-active='true'] .lamp {
+  color: #ffffff;
+  background: transparent;
+}
+
+.sos[data-active='true'] .lamp {
+  background: #ffffff;
+}
+
+.sos[data-active='true'] .caption {
+  font-size: 13px;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.ring {
+  position: absolute;
+  inset: -5px;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  color: var(--sos);
+}
+
+.sos[data-holding='true'] .ring {
+  color: #ffffff;
+}
+
+.sos[data-holding='true'] .ring circle:first-child {
+  opacity: 0.35;
+}
+
+.sos:not([data-holding='true']) .ring circle:first-child {
+  opacity: 0;
+}
+
+.sos[data-active='true'] .glyph > svg:last-child {
+  animation: beacon 1.2s ease-in-out infinite;
+}
+
+@keyframes beacon {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ---- More menu ---- */
+.menuRoot {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-dock) + 2);
+}
+
+.menuScrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.45);
+  animation: fade var(--dur-fast) var(--ease);
+}
+
+.menu {
+  position: absolute;
+  right: calc(var(--safe-right) + var(--space-2));
+  bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--space-2));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: min(300px, 100% - var(--space-4));
+  max-height: calc(100% - var(--dock-h) - var(--safe-bottom) - var(--safe-top) - var(--space-4));
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--slab-edge);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  animation: pop var(--dur) var(--ease);
+  transform-origin: bottom right;
+}
+
+.item {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 60px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  text-align: left;
+}
+
+.item:hover,
+.item:focus-visible,
+.item:active {
+  background: var(--surface-2);
+}
+
+.itemIcon {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  color: var(--text-dim);
+  stroke-width: 2.2;
+}
+
+.itemLabel {
+  flex: none;
+}
+
+.itemMeta {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- Landscape: a column on the right edge ---- */
+@media (orientation: landscape) {
+  .dock {
+    top: 0;
+    left: auto;
+    width: calc(var(--dock-w) + var(--safe-right));
+    grid-template-rows: repeat(4, minmax(var(--touch-primary), 1fr)) minmax(var(--touch-min), 0.72fr);
+    grid-template-columns: 1fr;
+    padding: var(--safe-top) var(--safe-right) var(--safe-bottom) 0;
+    border-top: 0;
+    border-left: 1px solid var(--slab-edge);
+  }
+
+  .key {
+    min-height: 0;
+    padding: 6px 4px;
+  }
+
+  .key + .key::before {
+    top: 0;
+    right: 16px;
+    bottom: auto;
+    left: 16px;
+    width: auto;
+    height: 1px;
+  }
+
+  .lamp {
+    top: 50%;
+    left: 5px;
+    width: 4px;
+    height: 30px;
+    transform: translateY(-50%);
+  }
+
+  .glyph {
+    width: 38px;
+    height: 38px;
+  }
+
+  .glyph > svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .more .caption {
+    display: none;
+  }
+
+  .meter {
+    bottom: 4px;
+  }
+
+  .menu {
+    right: calc(var(--dock-w) + var(--safe-right) + var(--space-2));
+    bottom: calc(var(--safe-bottom) + var(--space-2));
+    max-height: calc(100% - var(--safe-top) - var(--safe-bottom) - var(--space-4));
+    transform-origin: bottom right;
+  }
+}

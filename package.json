@@ -1,0 +1,34 @@
+{
+  "name": "intercom-nav",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Group ride intercom: live rider map, shared route, voice, music ducking, SOS and break alerts",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "e2e"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,magenta \"npm run dev -w @intercom/server\" \"npm run dev -w @intercom/web\"",
+    "build": "npm run build -w @intercom/web && npm run build -w @intercom/server",
+    "start": "npm run start -w @intercom/server",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "npm run test -w @intercom/e2e",
+    "livekit:dev": "node scripts/livekit-dev.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "concurrently": "^10.0.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
+  },
+  "overrides": {
+    "vite": "^7.3.7"
+  }
+}

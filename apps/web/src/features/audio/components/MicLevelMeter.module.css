@@ -1,0 +1,108 @@
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--slab-edge);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 28px;
+}
+
+.light {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--mic-off);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.live .light {
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 2px var(--mic-vox);
+}
+
+.speaking .light {
+  background: var(--speaking);
+  box-shadow: 0 0 0 4px var(--ok-tint);
+}
+
+.status {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-dim);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.speaking .status {
+  color: var(--speaking);
+}
+
+.value {
+  flex: none;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  position: relative;
+  height: 20px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--mic-vox);
+  transform-origin: left center;
+  transition: transform 60ms linear;
+  will-change: transform;
+}
+
+.speaking .fill {
+  background: var(--speaking);
+}
+
+.threshold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--warn);
+  transition: left 200ms linear;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+}
+
+.legendMark {
+  color: var(--warn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .threshold {
+    transition: none;
+  }
+}

@@ -1,0 +1,222 @@
+/*
+ * Rider markers. The root element is exactly the disc, so MapLibre's center anchor sits on the
+ * rider's position; everything else (arrow, rings, label, badges) hangs off it. Never transform the
+ * root: MapLibre positions it with `transform`.
+ */
+.marker {
+  --size: 44px;
+  width: var(--size);
+  height: var(--size);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* A larger invisible hit area for gloved fingers. */
+.marker::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+}
+
+.self {
+  --size: 48px;
+}
+
+.disc {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--rider-color);
+  color: var(--rider-text);
+  font: 800 17px/1 var(--font);
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 0 0 3px #0b0d10,
+    0 3px 10px rgba(0, 0, 0, 0.45);
+}
+
+.self .disc {
+  font-size: 18px;
+  box-shadow:
+    0 0 0 4px #ffffff,
+    0 0 0 6px rgba(11, 13, 16, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* Rotates around the disc center; the arrowhead sits just outside the ring. */
+.arrow {
+  position: absolute;
+  inset: -17px;
+  pointer-events: none;
+}
+
+.arrow svg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 18px;
+  margin-left: -12px;
+  overflow: visible;
+}
+
+.arrowHidden {
+  display: none;
+}
+
+.label {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 9px 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(11, 13, 16, 0.88);
+  color: var(--text);
+  font: 750 14px/1.2 var(--font);
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.name {
+  max-width: 132px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ago {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.ago:empty {
+  display: none;
+}
+
+.leader {
+  position: absolute;
+  top: -9px;
+  right: -11px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0b0d10;
+  box-shadow: 0 0 0 2px #0b0d10;
+}
+
+.leader svg {
+  width: 15px;
+  height: 15px;
+}
+
+.speakRing {
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 4px solid var(--speaking);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.speaking .speakRing {
+  opacity: 1;
+  animation: speak 1.1s ease-out infinite;
+}
+
+@keyframes speak {
+  0% {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.32);
+    opacity: 0.1;
+  }
+}
+
+.sosHalo {
+  position: absolute;
+  inset: -40px;
+  display: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 45, 45, 0.85) 0%, rgba(255, 45, 45, 0.4) 42%, rgba(255, 45, 45, 0) 70%);
+  pointer-events: none;
+}
+
+.sosTag {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  display: none;
+  transform: translateX(-50%);
+  padding: 4px 9px;
+  border-radius: 7px;
+  background: var(--sos);
+  color: #ffffff;
+  font: 800 14px/1 var(--font);
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+.sos .sosHalo {
+  display: block;
+  animation: sosPulse 1s ease-in-out infinite;
+}
+
+.sos .sosTag {
+  display: block;
+}
+
+.sos .disc {
+  box-shadow:
+    0 0 0 4px var(--sos),
+    0 0 0 7px #ffffff,
+    0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes sosPulse {
+  0%,
+  100% {
+    transform: scale(0.72);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.45;
+  }
+}
+
+.stale {
+  opacity: 0.5;
+}
+
+.lost {
+  opacity: 0.8;
+}
+
+.lost .disc {
+  background: #8b939e;
+  color: #0b0d10;
+}
+
+.lost .arrow {
+  display: none;
+}
+
+/* An SOS must stay loud even when the rider's position is old. */
+.sos.stale,
+.sos.lost {
+  opacity: 1;
+}

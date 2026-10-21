@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full-bleed variant for maskable / Apple touch icons: artwork kept inside the 80% safe circle. -->
+  <rect width="512" height="512" fill="#0B0D10"/>
+  <defs>
+    <path id="rider" d="M0 -66 L50 58 L0 32 L-50 58 Z"/>
+  </defs>
+  <g transform="translate(256 258) scale(0.9) translate(-256 -268)">
+    <use href="#rider" transform="translate(300 380)" fill="#1769E0"/>
+    <use href="#rider" transform="translate(212 268)" fill="#3D9BFF"/>
+    <use href="#rider" transform="translate(300 156)" fill="#F5F7FA"/>
+  </g>
+</svg>

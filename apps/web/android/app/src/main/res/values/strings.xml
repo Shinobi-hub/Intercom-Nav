@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Intercom Nav</string>
+    <string name="title_activity_main">Intercom Nav</string>
+    <string name="package_name">app.intercomnav</string>
+    <string name="custom_url_scheme">app.intercomnav</string>
+
+    <!-- Ride foreground service (RideService). JS normally supplies the title and text. -->
+    <string name="ride_channel_name">Ride in progress</string>
+    <string name="ride_channel_description">Shown while a ride keeps group voice and location running with the screen off</string>
+    <string name="ride_notification_title">Ride in progress</string>
+    <string name="ride_notification_text">Voice &amp; location on</string>
+</resources>

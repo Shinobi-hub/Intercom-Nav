@@ -1,0 +1,40 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(var(--touch-min), 1fr));
+  gap: var(--space-2);
+}
+
+@media (min-width: 600px) and (orientation: portrait) {
+  .grid {
+    grid-template-columns: repeat(8, minmax(var(--touch-min), 1fr));
+  }
+}
+
+.swatch {
+  display: grid;
+  place-items: center;
+  min-width: var(--touch-min);
+  height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--swatch);
+  color: var(--swatch-ink);
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.swatch:active {
+  transform: scale(0.94);
+}
+
+.swatch[aria-checked='true'] {
+  box-shadow:
+    0 0 0 3px var(--bg),
+    0 0 0 6px var(--text);
+}
+
+.check {
+  width: 28px;
+  height: 28px;
+  stroke-width: 3.2;
+}

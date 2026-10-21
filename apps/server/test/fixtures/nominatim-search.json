@@ -1,0 +1,44 @@
+[
+  {
+    "place_id": 249501374,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 1145089204,
+    "lat": "18.5193826",
+    "lon": "73.8553566",
+    "category": "historic",
+    "type": "fort",
+    "place_rank": 30,
+    "importance": 0.439316009741455,
+    "addresstype": "historic",
+    "name": "Shaniwar Wada",
+    "display_name": "Shaniwar Wada, Shivaji Road, Kasba Peth, Pune, Pune City Subdistrict, Pune, Maharashtra, 411001, India",
+    "boundingbox": [
+      "18.5185869",
+      "18.5201858",
+      "73.8545823",
+      "73.8561121"
+    ]
+  },
+  {
+    "place_id": 249402492,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "relation",
+    "osm_id": 2861672,
+    "lat": "18.5193826",
+    "lon": "73.8546467",
+    "category": "building",
+    "type": "yes",
+    "place_rank": 30,
+    "importance": 0.00006893644617375475,
+    "addresstype": "building",
+    "name": "Shaniwar Wada",
+    "display_name": "Shaniwar Wada, Shivaji Road, Kasba Peth, Pune, Pune City Subdistrict, Pune, Maharashtra, 411001, India",
+    "boundingbox": [
+      "18.5185869",
+      "18.5201858",
+      "73.8545823",
+      "73.8561121"
+    ]
+  }
+]

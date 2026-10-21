@@ -1,0 +1,104 @@
+/* Above sheets so alerts stay readable while a sheet is open. */
+.stack {
+  position: fixed;
+  top: calc(var(--safe-top) + var(--space-2));
+  left: 50%;
+  z-index: calc(var(--z-sheet) + 5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(100% - var(--space-4) - var(--safe-left) - var(--safe-right), 560px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  --tone: var(--accent);
+  --tone-bg: var(--accent-tint);
+  --tone-ink: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 68px;
+  padding: var(--space-3);
+  border: 1px solid var(--slab-edge);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  text-align: left;
+  pointer-events: auto;
+  animation: drop var(--dur) var(--ease);
+}
+
+.toast[data-kind='success'] {
+  --tone: var(--ok);
+}
+
+.toast[data-kind='warning'],
+.toast[data-kind='break'] {
+  --tone: var(--warn);
+}
+
+.toast[data-kind='error'],
+.toast[data-kind='sos'] {
+  --tone: var(--danger-strong);
+  --tone-ink: #ffffff;
+}
+
+.toast[data-kind='break'] {
+  background: #2a2008;
+  border-color: #5c4510;
+}
+
+.toast[data-kind='sos'] {
+  background: #3a0710;
+  border-color: #7a0f1c;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--tone);
+  color: var(--tone-ink);
+}
+
+.icon {
+  width: 26px;
+  height: 26px;
+  stroke-width: 2.4;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-heavy);
+  line-height: 1.2;
+}
+
+.body {
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.rider {
+  margin-left: auto;
+}
+
+@keyframes drop {
+  from {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+}

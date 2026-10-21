@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!--
+          "Ride in progress": keeps GPS, group voice and the WebView's JavaScript alive with the
+          screen off. Types it may claim; at runtime it only claims those whose permissions are
+          granted (see RideService.allowedTypes).
+        -->
+        <service
+            android:name=".ride.RideService"
+            android:exported="false"
+            android:foregroundServiceType="location|microphone|mediaPlayback" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+    </application>
+
+    <!-- Ride server (Socket.io), LiveKit and map tiles. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Lets the WebView keep navigator.onLine and online/offline events accurate (reconnects). -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Runtime: GPS position shared with the group. Foreground ("while in use") only; the ride
+         service keeps that access with the screen off, so no ACCESS_BACKGROUND_LOCATION. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Runtime: group voice (WebRTC) from the WebView. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Communication audio mode and routing (Chromium WebRTC, BluetoothRouter). -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- The ride foreground service and its three types (Android 14 requires one per type). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- Runtime (Android 13+): the ride notification and SOS / break alerts. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Partial wake lock held by the ride service: CPU stays up between fixes and audio buffers. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Haptic feedback and alert vibration. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Runtime (Android 12+, "Nearby devices"): see and route audio to a Bluetooth helmet headset. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- Bluetooth SCO routing on Android 11 and older. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+
+    <!-- Merged in by @capacitor/local-notifications for scheduled notifications, which this app
+         never uses (alerts are posted immediately). SCHEDULE_EXACT_ALARM is policy-restricted on
+         Google Play, so both are removed. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:node="remove" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" tools:node="remove" />
+
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+</manifest>

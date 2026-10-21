@@ -1,0 +1,20 @@
+.map {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #1b2026;
+}
+
+/* Night without a dark style: filter only the canvas, so DOM markers keep their true colors. */
+.nightFilter :global(.maplibregl-canvas) {
+  filter: var(--night-filter);
+}
+
+.unavailable {
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+  color: var(--text-dim);
+  font-size: var(--fs);
+  text-align: center;
+}

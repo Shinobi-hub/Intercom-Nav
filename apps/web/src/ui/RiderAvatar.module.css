@@ -1,0 +1,41 @@
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  background: var(--c);
+  color: var(--c-ink);
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.sm {
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+
+.md {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+}
+
+.lg {
+  width: 64px;
+  height: 64px;
+  font-size: 24px;
+}
+
+.dim {
+  opacity: 0.45;
+  filter: saturate(0.4);
+}
+
+.avatar[data-speaking='true'] {
+  box-shadow:
+    0 0 0 3px var(--bg),
+    0 0 0 6px var(--speaking);
+}

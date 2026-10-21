@@ -1,0 +1,79 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-resume);
+  display: grid;
+  place-items: center;
+  padding: calc(var(--safe-top) + var(--space-5)) calc(var(--safe-right) + var(--space-5))
+    calc(var(--safe-bottom) + var(--space-5)) calc(var(--safe-left) + var(--space-5));
+  background: rgba(5, 7, 10, 0.86);
+  animation: fade var(--dur) var(--ease);
+}
+
+/* The whole card is the target: any tap on it resumes. */
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, 440px);
+  padding: var(--space-6) var(--space-5);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  text-align: center;
+}
+
+.button:active {
+  background: var(--surface-2);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.icon svg {
+  width: 44px;
+  height: 44px;
+  stroke-width: 2.4;
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-heavy);
+  line-height: 1.15;
+}
+
+.body {
+  max-width: 32ch;
+  font-size: var(--fs);
+  color: var(--text-dim);
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .button {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: var(--space-5);
+    text-align: left;
+  }
+
+  .icon {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

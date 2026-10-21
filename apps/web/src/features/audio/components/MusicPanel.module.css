@@ -1,0 +1,287 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ---- player ------------------------------------------------------------------------------- */
+
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--slab-edge);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+
+.now {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.nowLabel {
+  color: var(--music);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.nowTitle {
+  overflow: hidden;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.transport {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: var(--space-3);
+}
+
+.transportKey {
+  display: grid;
+  place-items: center;
+  min-height: 76px;
+  padding: 0;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-3);
+  color: var(--text);
+  transition:
+    transform var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
+}
+
+.transportKey svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 2.4;
+}
+
+.transportKey:active:not(:disabled) {
+  transform: scale(0.96);
+  background: var(--border);
+}
+
+.transportKey:disabled {
+  opacity: 0.4;
+}
+
+.playKey {
+  min-height: 88px;
+  border-color: transparent;
+  background: var(--music);
+  color: var(--ink);
+}
+
+.playKey svg {
+  width: 44px;
+  height: 44px;
+  fill: currentColor;
+}
+
+.playKey:active:not(:disabled) {
+  background: var(--music);
+  filter: brightness(1.12);
+}
+
+/* ---- add ---------------------------------------------------------------------------------- */
+
+.add {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.streamForm {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.streamLabel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-3);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.streamLabel:focus-within {
+  border-color: var(--accent);
+}
+
+.streamIcon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--text-faint);
+}
+
+.streamInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: var(--fs);
+}
+
+.streamInput::placeholder {
+  color: var(--text-faint);
+}
+
+/* ---- playlist ----------------------------------------------------------------------------- */
+
+.empty {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+  border-radius: var(--radius);
+}
+
+.rowMain {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 64px;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  text-align: left;
+}
+
+.rowMain:active {
+  background: var(--surface-3);
+}
+
+.current .rowMain {
+  border-color: var(--music);
+  background: var(--music-tint);
+}
+
+.rowIcon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  color: var(--text-faint);
+}
+
+.current .rowIcon {
+  color: var(--music);
+}
+
+.rowText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rowTitle {
+  overflow: hidden;
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rowMeta {
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+}
+
+/* Three bars bouncing: "this one is playing", readable at a glance. */
+.eq {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background:
+    linear-gradient(var(--music), var(--music)) 0 100% / 4px 60% no-repeat,
+    linear-gradient(var(--music), var(--music)) 7px 100% / 4px 100% no-repeat,
+    linear-gradient(var(--music), var(--music)) 14px 100% / 4px 40% no-repeat;
+  animation: eq 0.9s steps(3) infinite;
+}
+
+@keyframes eq {
+  50% {
+    background-size:
+      4px 100%,
+      4px 45%,
+      4px 85%;
+  }
+}
+
+.remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--touch-min);
+  min-height: 64px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+
+.remove svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.2;
+}
+
+.removeArmed {
+  border-color: var(--danger);
+  background: var(--danger-tint);
+  color: var(--danger);
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--warn);
+  border-radius: var(--radius-sm);
+  background: var(--warn-tint);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}

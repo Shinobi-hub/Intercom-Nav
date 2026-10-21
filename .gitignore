@@ -1,0 +1,21 @@
+node_modules/
+dist/
+coverage/
+*.log
+.env
+.env.local
+.DS_Store
+
+# Playwright
+e2e/test-results/
+e2e/playwright-report/
+e2e/.cache/
+
+# Capacitor / native builds
+apps/web/android/app/build/
+apps/web/android/.gradle/
+apps/web/android/build/
+apps/web/android/local.properties
+apps/web/ios/App/Pods/
+apps/web/ios/App/build/
+apps/web/ios/DerivedData/

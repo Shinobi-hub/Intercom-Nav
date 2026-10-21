@@ -1,0 +1,212 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-alert);
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  padding: calc(var(--safe-top) + var(--space-5)) calc(var(--safe-right) + var(--space-5))
+    calc(var(--safe-bottom) + var(--space-5)) calc(var(--safe-left) + var(--space-5));
+  background: #000000;
+  color: #ffffff;
+}
+
+/* 500 ms period = 2 Hz, with short ramps so the edges aren't harsh. */
+.overlay :focus-visible {
+  outline-color: #ffffff;
+  outline-offset: 4px;
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  background: var(--danger-strong);
+  animation: flash 500ms linear infinite;
+}
+
+@keyframes flash {
+  0%,
+  44% {
+    opacity: 1;
+  }
+  50%,
+  94% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-5);
+  width: min(100%, 520px);
+  min-height: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-hero);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.markIcon {
+  width: 76px;
+  height: 76px;
+  stroke-width: 2.4;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 100%;
+  margin: var(--space-3) 0 0;
+  font-size: 36px;
+  font-weight: var(--fw-heavy);
+  line-height: 1.1;
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.needs {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+
+.where {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.arrow {
+  width: 52px;
+  height: 52px;
+  stroke-width: 3;
+  transition: transform 300ms var(--ease);
+}
+
+.distance {
+  font-size: var(--fs-display);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.bearing {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+}
+
+.unknown {
+  margin: var(--space-3) 0 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--fs);
+  font-weight: var(--fw-bold);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.respond {
+  font-size: var(--fs-xl);
+  letter-spacing: 0.02em;
+}
+
+/* Outlined actions sit on a dark plate so they read in both phases of the flash. */
+.secondary {
+  border-color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.waiting {
+  margin: 0;
+  font-size: var(--fs);
+  font-weight: var(--fw-bold);
+  text-align: center;
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .content {
+    flex-direction: row;
+    align-items: center;
+    width: min(100%, 880px);
+  }
+
+  .info,
+  .actions {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .mark {
+    font-size: 72px;
+  }
+
+  .markIcon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .who {
+    margin-top: var(--space-2);
+    font-size: var(--fs-xl);
+  }
+
+  .distance {
+    font-size: var(--fs-xxl);
+  }
+}

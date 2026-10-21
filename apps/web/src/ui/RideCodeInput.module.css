@@ -1,0 +1,32 @@
+.input {
+  width: 100%;
+  min-width: 0;
+  height: var(--touch-primary);
+  padding: 0 var(--space-4);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.input::placeholder {
+  color: var(--surface-3);
+  letter-spacing: 0.14em;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.invalid,
+.invalid:focus {
+  border-color: var(--danger);
+}

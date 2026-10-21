@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-19T06:07:49.580Z",
+  "files": {
+    "speech-loop.wav": {
+      "durationS": 12,
+      "speechWindowMs": [
+        3000,
+        6220
+      ],
+      "leadRmsDbfs": -70,
+      "speechRmsDbfs": -16.2,
+      "tailRmsDbfs": -70,
+      "speechFramesAboveMinus35": 0.94,
+      "quietFrameMaxDbfs": -69.9
+    },
+    "silence.wav": {
+      "durationS": 10,
+      "rmsDbfs": -70,
+      "loudestFrameDbfs": -69.9
+    },
+    "wind.wav": {
+      "durationS": 20,
+      "rmsDbfs": -24.1,
+      "peakDbfs": -7.7,
+      "below200HzDbfs": -24.5,
+      "speechBandDbfs": -37.8,
+      "gustRangeDb": 16.4
+    },
+    "tone.wav": {
+      "durationS": 10,
+      "rmsDbfs": -15.1,
+      "frequencyHz": 439.9
+    },
+    "music.wav": {
+      "durationS": 30,
+      "rmsDbfs": -16.4,
+      "peakDbfs": -4.2,
+      "secondRmsRangeDbfs": [
+        -16.8,
+        -16.1
+      ]
+    }
+  }
+}

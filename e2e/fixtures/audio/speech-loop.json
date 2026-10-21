@@ -1,0 +1,31 @@
+{
+  "file": "speech-loop.wav",
+  "sampleRate": 48000,
+  "cycleMs": 12000,
+  "note": "Chrome loops the file: the window repeats every cycleMs from the moment the fake mic starts.",
+  "speech": {
+    "startMs": 3000,
+    "endMs": 6220,
+    "durationMs": 3220,
+    "text": "Fuel stop at the next exit, then we ride on to the lake.",
+    "voice": "Samantha",
+    "rateWpm": 180
+  },
+  "windowsMs": [
+    [
+      3000,
+      6220
+    ]
+  ],
+  "voicedSegmentsMs": [
+    [
+      3010,
+      4600
+    ],
+    [
+      4880,
+      6150
+    ]
+  ],
+  "longestPauseMs": 280
+}
