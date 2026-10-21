@@ -1,0 +1,22 @@
+# Render Blueprint: the ride server + built PWA from the Dockerfile on Render's free plan.
+# Deploy with the "Deploy to Render" button in the README, or New → Blueprint in the Render dashboard.
+#
+# Voice: add LIVEKIT_URL, LIVEKIT_API_KEY and LIVEKIT_API_SECRET (e.g. a LiveKit Cloud project) under the
+# service's Environment tab. Without them rides use peer-to-peer (mesh) voice, which on mobile data
+# usually also needs TURN_* (see .env.example).
+services:
+  - type: web
+    name: intercom-nav
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # Render's proxy sits in front: take the client IP from X-Forwarded-For for the per-IP join limit.
+      - key: TRUST_PROXY
+        value: "1"
+      # The native apps' WebView origins (Android, iOS) calling this server cross-origin.
+      - key: CORS_ORIGINS
+        value: capacitor://localhost,https://localhost

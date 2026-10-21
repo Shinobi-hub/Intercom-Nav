@@ -62,6 +62,22 @@ The E2E suite launches one Chromium per simulated rider, feeds each a fake micro
 
 ## Production
 
+### Free hosting on Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Shinobi-hub/Intercom-Nav)
+
+The button reads [`render.yaml`](render.yaml): one free web service built from the `Dockerfile`, with HTTPS and an
+`https://<name>.onrender.com` address, redeployed on every push to `main`. Things to know about the free plan:
+
+- It sleeps after about 15 minutes without visitors; the first visit after that takes about a minute.
+- Rides live in memory, so a restart or redeploy ends rides in progress.
+- Voice: add `LIVEKIT_URL`, `LIVEKIT_API_KEY` and `LIVEKIT_API_SECRET` (for example a free LiveKit Cloud project)
+  under the service's **Environment** tab. Until then rides use peer-to-peer voice, which works on most Wi-Fi but
+  often needs a TURN server (`TURN_*`) on mobile data.
+- The pages carry `noindex`, so search engines leave the site out of their results.
+
+### Elsewhere
+
 - Serve the ride server behind HTTPS (it serves the built PWA and Socket.io on one port).
 - Voice: a LiveKit Cloud project (or self-hosted LiveKit) via `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`. Mesh mode on cellular needs a TURN server (`TURN_*`).
 - Routing defaults to the public Valhalla instance (motorcycle profile) and Photon for place search; both are fair-use community services, so use your own instances or a keyed provider for real traffic.
