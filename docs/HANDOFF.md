@@ -1,7 +1,7 @@
 # Handoff: Intercom Nav
 
-You are continuing **Intercom Nav**, a group motorcycle-ride app, in this repo:
-`/Users/shubhamdutta/Developer/Intercom Nav` (npm workspaces; quote the path, it has a space).
+You are continuing **Intercom Nav**, a group motorcycle-ride app, in this repo (npm workspaces; quote the
+checkout path if it contains spaces).
 The app is integrated, verified end to end (unit, E2E in dev and production, Android emulator) and documented;
 see "Current state". What's left needs real hardware ("Open items"). Do not rebuild anything that works.
 
