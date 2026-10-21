@@ -182,6 +182,9 @@ Control
   An offer still unanswered after 5 s (doubling per retry, up to 60 s) makes the link start over with a
   fresh connection, which the peer follows through the SDP session id. Without both, a lost offer from
   the impolite peer deadlocked the pair: the polite peer's own offer is ignored as a collision.
+  A link still not connected 10 s after creation starts over as well (20 s on the polite side, so
+  only one side restarts): Chrome occasionally leaves ICE gathering wedged, with no candidates and no
+  failure event, when the polite peer rolls back an offer it set a moment earlier.
 - Switching: the leader sends `voice:setMode`; every client gets `voice:mode` with fresh `VoiceJoinInfo`
   and the manager tears down one transport and starts the other.
 

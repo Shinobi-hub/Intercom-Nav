@@ -6,7 +6,7 @@ import type { RiderId, RtcSignalData, VoiceDataMessage, VoiceJoinInfo } from '@i
 import type { PeerStats, Unsubscribe, VoiceStats } from '../../../core/services';
 import { useRideStore } from '../../../core/store';
 import type { TransportCallbacks, VoiceTransport } from '../transport';
-import { OFFER_TIMEOUT_MS, PeerLink, type PeerLinkOptions } from './peerLink';
+import { CONNECT_TIMEOUT_MS, OFFER_TIMEOUT_MS, PeerLink, type PeerLinkOptions } from './peerLink';
 import type { SignalingChannel } from './signaling';
 
 /** Who is in the ride. Defaults to useRideStore; tests pass their own. */
@@ -27,11 +27,13 @@ export interface MeshTransportOptions {
   callbacks: TransportCallbacks;
   riders?: RiderSource;
   /** Overrides for tests (fake RTCPeerConnection, faster timers). */
-  link?: Partial<Pick<PeerLinkOptions, 'createPeerConnection' | 'disconnectedRestartMs' | 'failedRecreateMs' | 'offerTimeoutMs'>>;
+  link?: Partial<
+    Pick<PeerLinkOptions, 'createPeerConnection' | 'disconnectedRestartMs' | 'failedRecreateMs' | 'offerTimeoutMs' | 'connectTimeoutMs'>
+  >;
 }
 
-/** Each consecutive restart of a peer's connection waits twice as long for an answer, up to this. */
-const MAX_OFFER_TIMEOUT_MS = 60_000;
+/** Each consecutive restart of a peer's connection waits twice as long (answer, connection), up to this. */
+const MAX_RESTART_WAIT_MS = 60_000;
 
 export class MeshTransport implements VoiceTransport {
   readonly mode = 'mesh' as const;
@@ -147,7 +149,8 @@ export class MeshTransport implements VoiceTransport {
         this.recreate(peerId);
       },
       ...this.opts.link,
-      offerTimeoutMs: Math.min(MAX_OFFER_TIMEOUT_MS, (this.opts.link?.offerTimeoutMs ?? OFFER_TIMEOUT_MS) * 2 ** restarts),
+      offerTimeoutMs: Math.min(MAX_RESTART_WAIT_MS, (this.opts.link?.offerTimeoutMs ?? OFFER_TIMEOUT_MS) * 2 ** restarts),
+      connectTimeoutMs: Math.min(MAX_RESTART_WAIT_MS, (this.opts.link?.connectTimeoutMs ?? CONNECT_TIMEOUT_MS) * 2 ** restarts),
     });
     this.links.set(peerId, link);
     callbacks.onPeerState(peerId, 'connecting');

@@ -54,7 +54,7 @@ afterEach(async () => {
 });
 
 /** `buffered`: each rider's channel is wrapped for the whole test, as VoiceManager does. */
-function setup(delay = () => Math.random() * 3, { buffered = false, offerTimeoutMs = 150 } = {}) {
+function setup(delay = () => Math.random() * 3, { buffered = false, offerTimeoutMs = 150, connectTimeoutMs = 300 } = {}) {
   const hub = createSignalingHub(delay);
   const riders = riderSource({ [A]: true, [B]: true });
   const make = (selfId: RiderId) => {
@@ -65,7 +65,7 @@ function setup(delay = () => Math.random() * 3, { buffered = false, offerTimeout
       signaling: buffered ? bufferedSignaling(hub.channel(selfId)) : hub.channel(selfId),
       callbacks: rec.callbacks,
       riders: riders.source,
-      link: { createPeerConnection: (c) => new FakePeerConnection(c) as unknown as RTCPeerConnection, failedRecreateMs: 200, offerTimeoutMs },
+      link: { createPeerConnection: (c) => new FakePeerConnection(c) as unknown as RTCPeerConnection, failedRecreateMs: 200, offerTimeoutMs, connectTimeoutMs },
     });
     transports.push(transport);
     return { transport, ...rec };
@@ -164,6 +164,17 @@ describe('MeshTransport (perfect negotiation)', () => {
     await b.transport.start();
     await waitFor(() => a.peers[B] === 'connected' && b.peers[A] === 'connected', 1_000);
     expect(fakePc(a.transport, B)).toBe(first);
+  });
+
+  it.each(['impolite', 'polite'] as const)('starts over when the %s rider\'s connection never comes up, though nothing fails', async (side) => {
+    // Chrome can wedge ICE gathering after a glare rollback: signaling completes, then nothing at all.
+    const { a, b } = setup(() => 0, { connectTimeoutMs: 100 });
+    await Promise.all([a.transport.start(), b.transport.start()]);
+    const [stuckSide, peer] = side === 'impolite' ? [a.transport, B] : [b.transport, A]; // A < B: A is impolite
+    const wedged = fakePc(stuckSide, peer);
+    wedged.stuck = true;
+    await waitFor(() => fakePc(stuckSide, peer) !== wedged && a.peers[B] === 'connected' && b.peers[A] === 'connected', 3_000);
+    expect(wedged.signalingState).toBe('closed');
   });
 
   it('starts over when the other rider comes back with a fresh connection', async () => {

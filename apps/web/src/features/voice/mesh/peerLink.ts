@@ -10,6 +10,12 @@
  * leave both sides waiting forever when the lost offer was the impolite peer's: the polite peer's
  * own offer is ignored as a collision. So the link asks its owner to start over after offerTimeoutMs.
  *
+ * A link can also get stuck with signaling done but ICE never starting: Chrome occasionally leaves
+ * ICE gathering wedged (no local candidates, no failure) when the polite peer rolls back an offer it
+ * set a moment earlier. So a link that isn't connected connectTimeoutMs after it was created starts
+ * over too. The polite peer waits twice as long, so normally only the impolite one restarts, and the
+ * polite peer follows through the new session id without rolling anything back.
+ *
  * Both peers add an audio transceiver up front and swap the mic in with replaceTrack, so mic
  * changes never renegotiate. (Each side sends on its own transceiver and receives on the one the
  * other side created: two audio m-lines, bundled on one transport.) Alerts use a negotiated data
@@ -40,10 +46,14 @@ export interface PeerLinkOptions {
   failedRecreateMs?: number;
   /** Start over with a new connection if our offer is still unanswered this long after sending it. */
   offerTimeoutMs?: number;
+  /** Start over if not connected this long after creation (twice as long on the polite peer). */
+  connectTimeoutMs?: number;
 }
 
 /** Default for PeerLinkOptions.offerTimeoutMs: an answer normally takes one signaling round trip. */
 export const OFFER_TIMEOUT_MS = 5_000;
+/** Default for PeerLinkOptions.connectTimeoutMs: well above an ICE + DTLS setup over TURN. */
+export const CONNECT_TIMEOUT_MS = 10_000;
 
 /** Outcome of handling a signal: 'recreate' means it belongs to a new session from the peer. */
 export type SignalResult = 'ok' | 'recreate';
@@ -62,6 +72,7 @@ export class PeerLink {
   private disconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private failedTimer: ReturnType<typeof setTimeout> | null = null;
   private offerTimer: ReturnType<typeof setTimeout> | null = null;
+  private connectTimer: ReturnType<typeof setTimeout> | null;
   private closed = false;
 
   constructor(private readonly opts: PeerLinkOptions) {
@@ -94,6 +105,15 @@ export class PeerLink {
       opts.onTrack(e.track);
     };
     pc.onconnectionstatechange = () => this.onConnectionState();
+    this.connectTimer = setTimeout(
+      () => {
+        this.connectTimer = null;
+        if (this.closed || this.stateValue === 'connected') return;
+        console.warn(`[voice:mesh] no connection to ${opts.peerId} yet, starting over`);
+        opts.onRecreate();
+      },
+      (opts.connectTimeoutMs ?? CONNECT_TIMEOUT_MS) * (this.polite ? 2 : 1),
+    );
   }
 
   get state(): PeerState {
@@ -245,10 +265,12 @@ export class PeerLink {
     this.opts.onState(state);
   }
 
+  /** Connection recovery timers; the offer watchdog is separate (an offer can be pending while connected). */
   private clearTimers(): void {
     if (this.disconnectTimer) clearTimeout(this.disconnectTimer);
     if (this.failedTimer) clearTimeout(this.failedTimer);
-    this.disconnectTimer = this.failedTimer = null;
+    if (this.connectTimer) clearTimeout(this.connectTimer);
+    this.disconnectTimer = this.failedTimer = this.connectTimer = null;
   }
 }
 
